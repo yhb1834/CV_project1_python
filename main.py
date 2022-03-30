@@ -9,6 +9,35 @@ first_points_y = []
 second_points_x = []
 second_points_y = []
 
+roi_1_1 = []
+roi_1_2 = []
+roi_1_3 = []
+roi_1_4 = []
+
+roi_2_1 = []
+roi_2_2 = []
+roi_2_3 = []
+roi_2_4 = []
+
+gx_1_1 = 0
+gx_1_2 = 0
+gx_1_3 = 0
+gx_1_4 = 0
+gy_1_1 = 0
+gy_1_2 = 0
+gy_1_3 = 0
+gy_1_4 = 0
+
+gx_2_1 = 0
+gx_2_2 = 0
+gx_2_3 = 0
+gx_2_4 = 0
+gy_2_1 = 0
+gy_2_2 = 0
+gy_2_3 = 0
+gy_2_4 = 0
+
+
 first_img = cv2.imread("venv/1st.jpg")
 second_img = cv2.imread("venv/2nd.jpg")
 
@@ -41,6 +70,8 @@ cv2.setMouseCallback('Second Image', draw_rec2)
 
 
 def roi():
+    global roi_1_1, roi_1_2, roi_1_3, roi_1_4
+    global roi_2_1, roi_2_2, roi_2_3, roi_2_4
     roi_1_1 = first_img[first_points_y[0]:first_points_y[0] + patch_size,
               first_points_x[0]:first_points_x[0] + patch_size]
     roi_1_2 = first_img[first_points_y[1]:first_points_y[1] + patch_size,
@@ -65,6 +96,11 @@ def roi():
 # for r in rects:
 #    cv2.rectangle(first_img, (r[0], r[1]), (r[0]+r[2], r[1]+r[3]), 255)
 
+def calculate_gradient(img):
+    gx = cv2.Sobel(img, cv2.CV_32F, 1, 0, ksize=1)
+    gy = cv2.Sobel(img, cv2.CV_32F, 0, 1, ksize=1)
+    return gx, gy
+
 def main():
     while (True):
         cv2.imshow("First Image", first_img)
@@ -75,6 +111,20 @@ def main():
             break
     cv2.destroyAllWindows()
     roi()
+
+    global gx_1_1, gx_1_2, gx_1_3, gx_1_4, gy_1_1, gy_1_2, gy_1_3, gy_1_4
+    global gx_2_1, gx_2_2, gx_2_3, gx_2_4, gy_2_1, gy_2_2, gy_2_3, gy_2_4
+    gx_1_1, gy_1_1 = calculate_gradient(roi_1_1)
+    gx_1_2, gy_1_2 = calculate_gradient(roi_1_2)
+    gx_1_3, gy_1_3 = calculate_gradient(roi_1_3)
+    gx_1_4, gy_1_4 = calculate_gradient(roi_1_4)
+
+    gx_2_1, gy_2_1 = calculate_gradient(roi_2_1)
+    gx_2_2, gy_2_2 = calculate_gradient(roi_2_2)
+    gx_2_3, gy_2_3 = calculate_gradient(roi_2_3)
+    gx_2_4, gy_2_4 = calculate_gradient(roi_2_4)
+
+    mag_1_1, angle_1_1 = cv2.cartToPolar(gx_1_1, gy_1_1, angleInDegrees=True)
 
 
 main()
