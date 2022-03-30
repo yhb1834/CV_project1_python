@@ -37,6 +37,25 @@ gy_2_2 = 0
 gy_2_3 = 0
 gy_2_4 = 0
 
+mag_1_1 = 0
+mag_1_2 = 0
+mag_1_3 = 0
+mag_1_4 = 0
+mag_2_1 = 0
+mag_2_2 = 0
+mag_2_3 = 0
+mag_2_4 = 0
+
+angle_1_1 = 0
+angle_1_2 = 0
+angle_1_3 = 0
+angle_1_4 = 0
+angle_2_1 = 0
+angle_2_2 = 0
+angle_2_3 = 0
+angle_2_4 = 0
+
+
 
 first_img = cv2.imread("venv/1st.jpg")
 second_img = cv2.imread("venv/2nd.jpg")
@@ -101,17 +120,7 @@ def calculate_gradient(img):
     gy = cv2.Sobel(img, cv2.CV_32F, 0, 1, ksize=1)
     return gx, gy
 
-def main():
-    while (True):
-        cv2.imshow("First Image", first_img)
-        cv2.imshow("Second Image", second_img)
-
-        key = cv2.waitKey(1)
-        if key == 27:
-            break
-    cv2.destroyAllWindows()
-    roi()
-
+def Gradient():
     global gx_1_1, gx_1_2, gx_1_3, gx_1_4, gy_1_1, gy_1_2, gy_1_3, gy_1_4
     global gx_2_1, gx_2_2, gx_2_3, gx_2_4, gy_2_1, gy_2_2, gy_2_3, gy_2_4
     gx_1_1, gy_1_1 = calculate_gradient(roi_1_1)
@@ -124,7 +133,34 @@ def main():
     gx_2_3, gy_2_3 = calculate_gradient(roi_2_3)
     gx_2_4, gy_2_4 = calculate_gradient(roi_2_4)
 
+def mag_angle():
+    #Calculate Gradient magnitude and direction in degrees
+    global mag_1_1, mag_1_2, mag_1_3, mag_1_4, mag_2_1, mag_2_2, mag_2_3, mag_2_4
+    global angle_1_1, angle_1_2, angle_1_3, angle_1_4, angle_2_1, angle_2_2, angle_2_3, angle_2_4
     mag_1_1, angle_1_1 = cv2.cartToPolar(gx_1_1, gy_1_1, angleInDegrees=True)
+    mag_1_2, angle_1_2 = cv2.cartToPolar(gx_1_2, gy_1_2, angleInDegrees=True)
+    mag_1_3, angle_1_3 = cv2.cartToPolar(gx_1_3, gy_1_3, angleInDegrees=True)
+    mag_1_4, angle_1_4 = cv2.cartToPolar(gx_1_4, gy_1_4, angleInDegrees=True)
+    mag_2_1, angle_2_1 = cv2.cartToPolar(gx_2_1, gy_2_1, angleInDegrees=True)
+    mag_2_2, angle_2_2 = cv2.cartToPolar(gx_2_2, gy_2_2, angleInDegrees=True)
+    mag_2_3, angle_2_3 = cv2.cartToPolar(gx_2_3, gy_2_3, angleInDegrees=True)
+    mag_2_4, angle_2_4 = cv2.cartToPolar(gx_2_4, gy_2_4, angleInDegrees=True)
+
+def main():
+    while (True):
+        cv2.imshow("First Image", first_img)
+        cv2.imshow("Second Image", second_img)
+
+        key = cv2.waitKey(1)
+        if key == 27:
+            break
+    cv2.destroyAllWindows()
+    roi()
+
+    Gradient()
+
+    mag_angle()
+
 
 
 main()
