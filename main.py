@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 draw_size = 80
-patch_size = 10
+patch_size = 9
 
 first_points_x = []
 first_points_y = []
